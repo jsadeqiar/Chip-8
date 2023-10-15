@@ -1,6 +1,6 @@
 *.exe
 *.o
-.vscode/*
-.git/*
-.build/*
-.lib/*
+vscode/*
+git/*
+build/*
+lib/*
