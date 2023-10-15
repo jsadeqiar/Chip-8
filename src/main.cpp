@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../header/windowui.h"
+#include "windowui.h"
 
 void main(int argc, char** argv)
 {

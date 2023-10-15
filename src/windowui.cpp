@@ -1,4 +1,4 @@
-#include "../header/windowui.h"
+#include "windowui.h"
 
 WindowUI::WindowUI()
 {
