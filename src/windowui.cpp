@@ -1,24 +1,29 @@
 #include "WindowUI.h"
+#include "CPU.h"
 
-WindowUI::WindowUI()
+WindowUI::WindowUI(const std::string title, int windowWidth, int windowHeight, int textureWidth, int textureHeight)
 {
-    this->Window = SDL_CreateWindow("CHIP-8", 600, 600, SDL_WINDOW_RESIZABLE);
+    SDL_Init(SDL_INIT_VIDEO);
+    Window = SDL_CreateWindow(title.c_str(), windowWidth, windowHeight, SDL_WINDOW_RESIZABLE);
+    Renderer = SDL_CreateRenderer(Window, NULL, 0);
+    Texture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGBA8888, 
+    SDL_TEXTUREACCESS_STREAMING, textureWidth, textureHeight);
 }
 
 WindowUI::~WindowUI()
 {
-    SDL_DestroyWindow(this->Window);
+    SDL_DestroyTexture(Texture);
+    SDL_DestroyRenderer(Renderer);
+    SDL_DestroyWindow(Window);
     SDL_Quit();
 }
 
-void WindowUI::Run()
+void WindowUI::UpdateScreen(uint32_t * const buffer, int pitch)
 {
-    while(true)
-    {
-        if(SDL_PollEvent(&this->WindowEvent))
-        {
-            if(SDL_EVENT_QUIT == this->WindowEvent.type)
-                break;
-        }
-    }
+    SDL_UpdateTexture(Texture, NULL, buffer, pitch);
+    SDL_RenderClear(Renderer);
+    SDL_RenderTexture(Renderer, Texture, NULL, NULL);
+    SDL_RenderPresent(Renderer);
+    return;
 }
+
