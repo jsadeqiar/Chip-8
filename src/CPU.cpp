@@ -533,18 +533,31 @@ void CPU::_Fx07()
 void CPU::_Fx0A()
 {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    static uint8_t previousFrameBuffer[MAX_KEYS]{0}; //Keep buffer of previous frames keystates.
 
-    for(int i = 0; i < 16; i++)
+    for(int i = 0; i < MAX_KEYS; i++)
     {
-        if(keypad.IsKeyPressed(i))
+        // If key pressed in previous frame but not this one:
+        // 1) Update buffer
+        // 2) Set Register
+        // 3) Continue with program
+        if(previousFrameBuffer[i] && !keypad.IsKeyPressed(i))
         {
+            previousFrameBuffer[i] = 0;
             registers[Vx] = i;
             return;
         }
+        // If key not pressed in previous frame but is pressed now:
+        // 1) Update buffer for future frame comparison
+        else if(!previousFrameBuffer[i] && keypad.IsKeyPressed(i))
+            previousFrameBuffer[i] = 1;
     }
 
+    // All other cases such as:
+    // 1) Not pressed previously or currently
+    // 2) Pressed previously and currently
+    // PC will stay at current instruction until a buffer/realtime discrepency is observed
     pc -= 2;
-
     return;
 }
 
