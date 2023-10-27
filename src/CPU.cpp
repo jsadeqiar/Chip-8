@@ -377,9 +377,9 @@ void CPU::_8xy4()
 
     uint16_t result = registers[Vx] + registers[Vy];
 
+    registers[Vx] = result & 0xFFu; 
+
     registers[0xF] = (result > 255u) ? 1 : 0;
-    
-    registers[Vx] = result & 0xFFu;
 
     return;
 }
@@ -389,9 +389,11 @@ void CPU::_8xy5()
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
     uint8_t Vy = (opcode & 0x00F0u) >> 4u;
 
-    registers[0xF] = (registers[Vx] > registers[Vy]) ? 1 : 0;
+    uint8_t Vx_Old = registers[Vx];
     
     registers[Vx] -= registers[Vy];
+
+    registers[0xF] = (Vx_Old > registers[Vy]) ? 1 : 0;
 
     return;
 }
@@ -399,9 +401,11 @@ void CPU::_8xy5()
 void CPU::_8xy6()
 {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
-    registers[0xF] = opcode & 0x1u;
-
+    uint8_t Vx_Old = registers[Vx];
+    
     registers[Vx] >>= 1;
+    
+    registers[0xF] = Vx_Old & 0x1u;
 
     return;
 }
@@ -410,10 +414,10 @@ void CPU::_8xy7()
 {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
     uint8_t Vy = (opcode & 0x00F0u) >> 4u;
-
-    registers[0xF] = (registers[Vy] > registers[Vx]) ? 1 : 0;
     
     registers[Vx] = registers[Vy] - registers[Vx];
+
+    registers[0xF] = (registers[Vy] > registers[Vx]) ? 1 : 0;
 
     return;
 }
@@ -421,10 +425,12 @@ void CPU::_8xy7()
 void CPU::_8xyE()
 {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
-
-    registers[0xF] = registers[Vx] >> 7u;
+    uint8_t Vx_Old = registers[Vx];
 
     registers[Vx] <<= 1;
+
+    registers[0xF] = Vx_Old >> 7u;
+    
     return;
 }
 
