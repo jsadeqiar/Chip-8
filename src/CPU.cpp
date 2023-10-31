@@ -23,7 +23,7 @@ CPU::CPU(WindowUI* window)
 
 CPU::~CPU()
 {
-
+    delete window;
 }
 
 void CPU::LoadROMToMemory(std::string filename)
@@ -484,12 +484,17 @@ void CPU::_Dxyn()
 
     registers[0xF] = 0;
 
+    // Rows are of size nibble; opcode defined size
     for(int row = 0; row < nibble; row++)
     {
+        // Grab row from memory via I reg.
         uint8_t nthByte = memory.GetByte(I + row);
 
+        // Each row is fixed 8-bit length
         for(int col = 0; col < 8; col++)
         {
+            // Fetch the current pixel from display
+            // Fetch current bit of sprite via bit-shift w.r.t. current col.
             uint32_t currentPixel = display[VIDEO_WIDTH * (yCoord + row) + (xCoord + col)];
             uint8_t nthBytePixel = nthByte & (0x80u >> col);
 

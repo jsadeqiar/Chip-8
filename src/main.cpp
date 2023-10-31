@@ -1,11 +1,10 @@
 #include "CPU.h"
 
-
 void main(int argc, char** argv)
 {
     if(argc != 3)
     {
-        std::cout << "Format: " << argv[0] << " (Video Scale) (ROM name)\n";
+        std::cout << "Format: " << ".\\CHIP-8.exe (Video Scale) (ROM path)\n";
         return;
     }
 
