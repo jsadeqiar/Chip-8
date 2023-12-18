@@ -4,7 +4,7 @@ A Chip-8 emulator written entirely in C++ with the use of SDL.
 
 # Description
 
-Written in C++, this project helped to get me into emulator development. From implementing specific opcodes of the Chip-8 to writing 
+Written in C++, this project helped to get me into the basics of emulator development. From implementing opcodes, reading/writing to and from registers, managing user input and displaying output. 
 
 # How to Build and Run
 Clone the repository and submodules:
